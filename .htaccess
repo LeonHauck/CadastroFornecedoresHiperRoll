@@ -1,0 +1,14 @@
+# Bloquear acesso direto ao arquivo .env
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Bloquear acesso ao .env.example (opcional)
+<Files ".env.example">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Desativar listagem de diretórios (Segurança extra)
+Options -Indexes

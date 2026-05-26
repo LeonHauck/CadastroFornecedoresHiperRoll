@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Fornecedores | Hiperroll Embalagens</title>
+    <meta name="description" content="Portal profissional para cadastro automatizado de fornecedores da Hiperroll Embalagens.">
+    <link rel="stylesheet" href="style.css">
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div id="toastContainer" class="toast-container"></div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <img src="https://hiperroll.com.br/storage/2024/11/Novo-Logotipo-2-contorno-branco-HiperRoll.png" alt="Hiperroll Logo" class="hero-logo">
+            <h1>Cadastro de Fornecedores e Clientes</h1>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="registration-card">
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-steps">
+                    <span class="step-indicator active">1</span>
+                    <span class="step-indicator">2</span>
+                    <span class="step-indicator">3</span>
+                    <span class="step-indicator">4</span>
+                </div>
+            </div>
+
+            <form id="supplierForm">
+                <!-- STEP 1: Dados Cadastrais -->
+                <div class="form-section active" id="section1">
+                    <h2 class="section-title">1. Dados Cadastrais</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="tipoCadastro">Tipo de Cadastro *</label>
+                            <select id="tipoCadastro" name="tipoCadastro" required>
+                                <option value="fornecedor">Fornecedor</option>
+                                <option value="cliente">Cliente</option>
+                                <option value="ambos">Ambos</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cnpj">CNPJ / CPF *</label>
+                            <div style="position: relative;">
+                                <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required>
+                                <div id="cnpjLoading" class="loading-spinner" style="position: absolute; right: 10px; top: 12px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="razaoSocial">Razão Social / Nome Completo *</label>
+                            <input type="text" id="razaoSocial" name="razaoSocial" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nomeFantasia">Nome Fantasia *</label>
+                            <input type="text" id="nomeFantasia" name="nomeFantasia" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ramo">Ramo de Atividade *</label>
+                            <select id="ramo" name="ramo" required>
+                                <option value="">Selecione...</option>
+                                <option value="Supermercadista">Supermercadista</option>
+                                <option value="Varejista">Varejista</option>
+                                <option value="Hospitalar">Hospitalar</option>
+                                <option value="Atacadista">Atacadista</option>
+                                <option value="Distribuidor">Distribuidor</option>
+                                <option value="Exportador">Exportador</option>
+                                <option value="Industria">Indústria</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regimeTributario">Regime Tributário *</label>
+                            <select id="regimeTributario" name="regimeTributario" required>
+                                <option value="">Selecione...</option>
+                                <option value="Lucro Presumido">Lucro Presumido</option>
+                                <option value="Lucro Real">Lucro Real</option>
+                                <option value="MEI">MEI</option>
+                                <option value="Simples Nacional">Simples Nacional</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Localização e Contato -->
+                <div class="form-section" id="section2">
+                    <h2 class="section-title">2. Localização e Contato</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="cep">CEP *</label>
+                            <div style="position: relative;">
+                                <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+                                <div id="cepLoading" class="loading-spinner" style="position: absolute; right: 10px; top: 12px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="estado">Estado (UF) *</label>
+                            <select id="estado" name="estado" required>
+                                <option value="">Selecione...</option>
+                                <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                                <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                                <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                                <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                                <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                                <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                                <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                                <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                                <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cidade">Cidade *</label>
+                            <input type="text" id="cidade" name="cidade" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="logradouro">Endereço Completo *</label>
+                            <input type="text" id="logradouro" name="logradouro" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefone">Telefone Principal *</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">E-mail Principal *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="representante">Representante</label>
+                            <input type="text" id="representante" name="representante">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Financeiro e Fiscal -->
+                <div class="form-section" id="section3">
+                    <h2 class="section-title">3. Financeiro e Fiscal</h2>
+                    <div class="form-grid">
+                        <div class="form-group ie-field-group">
+                            <label for="inscricaoEstadual">Inscrição Estadual *</label>
+                            <div class="ie-input-wrapper">
+                                <input type="text" id="inscricaoEstadual" name="inscricaoEstadual" required>
+                                <div class="ie-toggle">
+                                    <input type="checkbox" id="isentoIE">
+                                    <label for="isentoIE">Sou Isento</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="isencaoFiscal">Isenção Fiscal? *</label>
+                            <select id="isencaoFiscal" name="isencaoFiscal" required>
+                                <option value="Não">Não</option>
+                                <option value="Sim">Sim</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="qualIsencaoGroup" style="display: none;">
+                            <label for="qualIsencao">Qual Isenção?</label>
+                            <select id="qualIsencao" name="qualIsencao">
+                                <option value="">Selecione...</option>
+                                <option value="ICMS">ICMS</option>
+                                <option value="ICMS - ST">ICMS - ST</option>
+                                <option value="IPI">IPI</option>
+                                <option value="PIS">PIS</option>
+                                <option value="COFINS">COFINS</option>
+                                <option value="ISS">ISS</option>
+                                <option value="Imposto de Importação">Imposto de Importação</option>
+                                <option value="Simples Nacional">Simples Nacional</option>
+                                <option value="SUFRAMA">SUFRAMA</option>
+                                <option value="SUDENE">SUDENE</option>
+                                <option value="SUDAM">SUDAM</option>
+                                <option value="Produtor Rural">Produtor Rural</option>
+                                <option value="Entidade Filantrópica">Entidade Filantrópica</option>
+                                <option value="Regime Especial">Regime Especial</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formaPagamento">Forma de Pagamento *</label>
+                            <select id="formaPagamento" name="formaPagamento" required>
+                                <option value="Boleto">Boleto</option>
+                                <option value="Pix">Pix</option>
+                                <option value="Deposito">Depósito</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prazoPagamento">Prazo de Pagamento *</label>
+                            <input type="text" id="prazoPagamento" name="prazoPagamento" placeholder="Ex: 30 dias" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailFinanceiro">E-mail Financeiro *</label>
+                            <div class="ie-input-wrapper">
+                                <input type="email" id="emailFinanceiro" name="emailFinanceiro" required>
+                                <div class="ie-toggle">
+                                    <input type="checkbox" id="naoPossuoEmailFin">
+                                    <label for="naoPossuoEmailFin">Mesmo do principal</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefoneFinanceiro">Telefone Financeiro</label>
+                            <div class="ie-input-wrapper">
+                                <input type="tel" id="telefoneFinanceiro" name="telefoneFinanceiro">
+                                <div class="ie-toggle">
+                                    <input type="checkbox" id="naoPossuoTelFin">
+                                    <label for="naoPossuoTelFin">Mesmo do principal</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Logística -->
+                <div class="form-section" id="section4">
+                    <h2 class="section-title">4. Logística</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="horarioNF">Recebimento NF *</label>
+                            <input type="time" id="horarioNF" name="horarioNF" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="horarioMercadoria">Recebimento Mercadoria *</label>
+                            <input type="time" id="horarioMercadoria" name="horarioMercadoria" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="agendamento">Necessita Agendamento? *</label>
+                            <select id="agendamento" name="agendamento" required>
+                                <option value="Não">Não</option>
+                                <option value="Sim">Sim</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tipoCarga">Tipo de Carga *</label>
+                            <select id="tipoCarga" name="tipoCarga" required>
+                                <option value="Batida">Batida</option>
+                                <option value="Paletizada">Paletizada</option>
+                                <option value="Não se aplica">Não se aplica</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pagamentoDescarga">Pagamento de Descarga? *</label>
+                            <select id="pagamentoDescarga" name="pagamentoDescarga" required>
+                                <option value="Não">Não</option>
+                                <option value="Sim">Sim</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="necessidadeChapa">Necessita Chapa? *</label>
+                            <select id="necessidadeChapa" name="necessidadeChapa" required>
+                                <option value="Não">Não</option>
+                                <option value="Sim">Sim</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="restricoesVeiculo">Restrições de Veículo? *</label>
+                            <select id="restricoesVeiculo" name="restricoesVeiculo" required>
+                                <option value="Não">Não</option>
+                                <option value="Sim">Sim</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="acessoTerceiros">Acesso carga de terceiros? *</label>
+                            <select id="acessoTerceiros" name="acessoTerceiros" required>
+                                <option value="Não">Não</option>
+                                <option value="Sim">Sim</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailLogistico">E-mail Logístico *</label>
+                            <div class="ie-input-wrapper">
+                                <input type="email" id="emailLogistico" name="emailLogistico" required>
+                                <div class="ie-toggle">
+                                    <input type="checkbox" id="naoPossuoEmailLog">
+                                    <label for="naoPossuoEmailLog">Mesmo do principal</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefoneLogistico">Telefone Logístico *</label>
+                            <div class="ie-input-wrapper">
+                                <input type="tel" id="telefoneLogistico" name="telefoneLogistico" required>
+                                <div class="ie-toggle">
+                                    <input type="checkbox" id="naoPossuoTelLog">
+                                    <label for="naoPossuoTelLog">Mesmo do principal</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="observacoes">Observações Importantes</label>
+                            <textarea id="observacoes" name="observacoes" rows="5" placeholder="Adicione aqui qualquer observação relevante para o seu cadastro..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-nav btn-prev" id="prevBtn" style="display: none;">Anterior</button>
+                    <button type="button" class="btn-nav btn-next" id="nextBtn">Próximo</button>
+                    <button type="submit" class="btn-submit" id="submitBtn" style="display: none;">
+                        <span>Finalizar Cadastro</span>
+                        <div id="btnLoading" class="loading-spinner" style="border-top-color: white;"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="success-icon">✓</div>
+            <h2>Cadastro Enviado!</h2>
+            <p style="margin: 1rem 0; color: var(--text-light);">Recebemos suas informações com sucesso. Nossa equipe de suprimentos analisará seu perfil e entrará em contato em breve.</p>
+            <div style="display: flex; gap: 1rem; flex-direction: column;">
+                <button type="button" class="btn-submit" onclick="generatePDF()" style="background: var(--vivid-blue);">
+                    <span style="font-size: 1.2rem; margin-right: 8px;">📄</span> Gerar PDF do Cadastro
+                </button>
+                <button type="button" class="btn-prev" onclick="closeModal()" style="border: none;">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CNPJ Confirmation Modal -->
+    <div id="cnpjModal" class="modal">
+        <div class="modal-content">
+            <div class="toast-icon" style="margin: 0 auto 1.5rem; background: var(--vivid-blue);">?</div>
+            <h2>CNPJ não encontrado</h2>
+            <p style="margin: 1rem 0; color: var(--text-light);">Não conseguimos localizar este CNPJ automaticamente. Você tem certeza que o número está correto?</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <button type="button" class="btn-prev" onclick="confirmCNPJ(true)" style="flex: 1;">Sim, está correto</button>
+                <button type="button" class="btn-submit" onclick="confirmCNPJ(false)" style="flex: 1; background: var(--accent-red); margin-top: 0;">Não, vou revisar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

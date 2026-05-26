@@ -1,0 +1,11 @@
+# Ignorar senhas e tokens
+.env
+
+# Ignorar logs de erro gerados pelo servidor
+error_email.log
+error_log
+
+# Ignorar arquivos temporários e de sistema
+uploads/
+.DS_Store
+Thumbs.db
