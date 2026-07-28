@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (step === 1 && !cnpjValidated) {
             cnpjInput.classList.add('input-error');
-            const cleanCnpj = cnpjInput.value.replace(/\D/g, '');
+            const cleanCnpj = cnpjInput.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
             if (cleanCnpj.length === 14) {
                 cnpjAttempts[cleanCnpj] = (cnpjAttempts[cleanCnpj] || 0) + 1;
                 if (cnpjAttempts[cleanCnpj] >= 2) {
@@ -91,8 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     errors.push("CNPJ não validado.");
                 }
+            } else if (cleanCnpj.length === 11) {
+                cnpjValidated = true;
+                cnpjInput.classList.remove('input-error');
             } else {
-                errors.push("CNPJ deve ter 14 dígitos.");
+                errors.push("CNPJ/CPF deve ter 11 ou 14 caracteres.");
             }
         }
 
@@ -117,14 +120,21 @@ document.addEventListener('DOMContentLoaded', () => {
     cnpjInput.addEventListener('input', (e) => {
         cnpjValidated = false;
         cnpjInput.style.borderColor = '#CBD5E0';
-        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2})/);
-        e.target.value = !x[2] ? x[1] : x[1] + '.' + x[2] + '.' + x[3] + '/' + x[4] + (x[5] ? '-' + x[5] : '');
+        let val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        
+        if (val.length <= 11) {
+            let x = val.match(/([A-Z0-9]{0,3})([A-Z0-9]{0,3})([A-Z0-9]{0,3})([A-Z0-9]{0,2})/);
+            if (x) e.target.value = !x[2] ? x[1] : x[1] + '.' + x[2] + (x[3] ? '.' + x[3] : '') + (x[4] ? '-' + x[4] : '');
+        } else {
+            let x = val.match(/([A-Z0-9]{0,2})([A-Z0-9]{0,3})([A-Z0-9]{0,3})([A-Z0-9]{0,4})([A-Z0-9]{0,2})/);
+            if (x) e.target.value = !x[2] ? x[1] : x[1] + '.' + x[2] + '.' + x[3] + '/' + x[4] + (x[5] ? '-' + x[5] : '');
+        }
     });
 
     let isFetchingCnpj = false;
 
     cnpjInput.addEventListener('blur', async () => {
-        const cnpj = cnpjInput.value.replace(/\D/g, '');
+        const cnpj = cnpjInput.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
         if (cnpj.length !== 14 || isFetchingCnpj) return;
 
         isFetchingCnpj = true;
@@ -161,14 +171,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             cnpjInput.style.borderColor = 'var(--accent-red)';
-            const clean = cnpjInput.value.replace(/\D/g, '');
+            const clean = cnpjInput.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
             cnpjAttempts[clean] = (cnpjAttempts[clean] || 0) + 1;
             if (cnpjAttempts[clean] === 1) showToast("CNPJ não encontrado ou sistema fora do ar.");
             else document.getElementById('cnpjModal').style.display = 'flex';
         } finally {
             isFetchingCnpj = false;
             showLoading('cnpjLoading', false);
-            cnpjInput.placeholder = "00.000.000/0000-00";
+            cnpjInput.placeholder = "CNPJ ou CPF";
         }
     });
 
@@ -292,8 +302,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                     const addF = (l, v) => {
                         if (y > 280) { doc.addPage(); y = 20; }
-                        doc.setFontSize(10); doc.setTextColor(40, 40, 40); doc.setFont("helvetica", "bold"); doc.text(`${l}:`, 20, y);
-                        doc.setFont("helvetica", "normal"); doc.text(String(v || "N/A"), 70, y); y += 7;
+                        const labelLines = doc.splitTextToSize(`${l}:`, 60);
+                        const valueLines = doc.splitTextToSize(String(v || "N/A"), 90);
+                        const lineHeight = 7;
+                        const lines = Math.max(labelLines.length, valueLines.length);
+                        doc.setFontSize(10);
+                        for (let i = 0; i < lines; i++) {
+                            if (labelLines[i]) {
+                                doc.setFont("helvetica", "bold");
+                                doc.setTextColor(40, 40, 40);
+                                doc.text(labelLines[i], 20, y + (i * lineHeight));
+                            }
+                            if (valueLines[i]) {
+                                doc.setFont("helvetica", "normal");
+                                doc.text(valueLines[i], 95, y + (i * lineHeight));
+                            }
+                        }
+                        y += lines * lineHeight;
                     };
 
                     addSect("1. DADOS CADASTRAIS");
@@ -319,6 +344,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         addF("Tipo de Isenção", data.qualIsencao);
                     }
                     addF("Forma Pagto", data.formaPagamento);
+                    addF("Cliente paga boleto de Terceiros?", data.clientePagaBoletos);
+                    addF("Boleto anexado a NF?", data.boletoAnexadoNF);
                     addF("Prazo Pagto", data.prazoPagamento);
                     addF("E-mail Fin.", data.emailFinanceiro);
                     addF("Tel. Fin.", data.telefoneFinanceiro);
@@ -427,8 +454,23 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         const addF = (l, v) => {
             if (y > 280) { doc.addPage(); y = 20; }
-            doc.setFontSize(10); doc.setTextColor(40, 40, 40); doc.setFont("helvetica", "bold"); doc.text(`${l}:`, 20, y);
-            doc.setFont("helvetica", "normal"); doc.text(String(v || "N/A"), 70, y); y += 7;
+            const labelLines = doc.splitTextToSize(`${l}:`, 70);
+            const valueLines = doc.splitTextToSize(String(v || "N/A"), 90);
+            const lineHeight = 7;
+            const lines = Math.max(labelLines.length, valueLines.length);
+            doc.setFontSize(10);
+            for (let i = 0; i < lines; i++) {
+                if (labelLines[i]) {
+                    doc.setFont("helvetica", "bold");
+                    doc.setTextColor(40, 40, 40);
+                    doc.text(labelLines[i], 20, y + (i * lineHeight));
+                }
+                if (valueLines[i]) {
+                    doc.setFont("helvetica", "normal");
+                    doc.text(valueLines[i], 95, y + (i * lineHeight));
+                }
+            }
+            y += lines * lineHeight;
         };
 
         addSect("1. DADOS CADASTRAIS");
@@ -478,8 +520,23 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             const addF = (l, v) => {
                 if (y > 280) { doc.addPage(); y = 20; }
-                doc.setFontSize(10); doc.setTextColor(40, 40, 40); doc.setFont("helvetica", "bold"); doc.text(`${l}:`, 20, y);
-                doc.setFont("helvetica", "normal"); doc.text(String(v || "N/A"), 70, y); y += 7;
+                const labelLines = doc.splitTextToSize(`${l}:`, 70);
+                const valueLines = doc.splitTextToSize(String(v || "N/A"), 90);
+                const lineHeight = 7;
+                const lines = Math.max(labelLines.length, valueLines.length);
+                doc.setFontSize(10);
+                for (let i = 0; i < lines; i++) {
+                    if (labelLines[i]) {
+                        doc.setFont("helvetica", "bold");
+                        doc.setTextColor(40, 40, 40);
+                        doc.text(labelLines[i], 20, y + (i * lineHeight));
+                    }
+                    if (valueLines[i]) {
+                        doc.setFont("helvetica", "normal");
+                        doc.text(valueLines[i], 95, y + (i * lineHeight));
+                    }
+                }
+                y += lines * lineHeight;
             };
 
             addSect("1. DADOS CADASTRAIS");
@@ -505,6 +562,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 addF("Tipo de Isenção", data.qualIsencao);
             }
             addF("Forma Pagto", data.formaPagamento);
+            addF("Cliente paga boleto de Terceiros?", data.clientePagaBoletos);
+            addF("Boleto anexado a NF?", data.boletoAnexadoNF);
             addF("Prazo Pagto", data.prazoPagamento);
             addF("E-mail Fin.", data.emailFinanceiro);
             addF("Tel. Fin.", data.telefoneFinanceiro);

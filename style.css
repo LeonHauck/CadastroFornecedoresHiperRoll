@@ -40,7 +40,8 @@ body {
 }
 
 .hero-logo {
-    max-width: 200px; /* Reduced slightly to fit better */
+    max-width: 180px;
+    width: 100%;
     height: auto;
     margin-bottom: 1rem;
     display: block;

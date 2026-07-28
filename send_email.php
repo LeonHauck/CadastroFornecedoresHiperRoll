@@ -59,9 +59,9 @@ $corpoEmail = "
         .container { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
         .content { padding: 20px; }
         .section { margin-top: 20px; border-bottom: 2px solid #EC162B; padding-bottom: 5px; color: #20236D; font-weight: bold; text-transform: uppercase; }
-        .field { margin: 10px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .label { font-weight: bold; color: #555; width: 180px; display: inline-block; }
-        .value { color: #000; }
+        .field { margin: 10px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; display: grid; grid-template-columns: minmax(190px, 260px) 1fr; column-gap: 12px; align-items: baseline; }
+        .label { font-weight: bold; color: #555; display: block; word-break: break-word; white-space: normal; }
+        .value { color: #000; display: block; word-break: break-word; white-space: normal; }
         .footer { background: #f9f9f9; padding: 15px; font-size: 12px; text-align: center; color: #888; }
     </style>
 </head>
@@ -92,6 +92,8 @@ $corpoEmail = "
             <div class='field'><span class='label'>I.E:</span> <span class='value'>" . ($data['inscricaoEstadual'] ?? 'N/A') . "</span></div>
             <div class='field'><span class='label'>Isenção Fiscal:</span> <span class='value'>" . ($data['isencaoFiscal'] ?? 'N/A') . " (" . ($data['qualIsencao'] ?? 'N/A') . ")</span></div>
             <div class='field'><span class='label'>Forma Pagto:</span> <span class='value'>" . ($data['formaPagamento'] ?? 'N/A') . "</span></div>
+            <div class='field'><span class='label'>Cliente paga boleto de Terceiros?</span> <span class='value'>" . ($data['clientePagaBoletos'] ?? 'N/A') . "</span></div>
+            <div class='field'><span class='label'>Boleto anexado a NF?</span> <span class='value'>" . ($data['boletoAnexadoNF'] ?? 'N/A') . "</span></div>
             <div class='field'><span class='label'>Prazo:</span> <span class='value'>" . ($data['prazoPagamento'] ?? 'N/A') . "</span></div>
             <div class='field'><span class='label'>E-mail Fin.:</span> <span class='value'>" . ($data['emailFinanceiro'] ?? 'N/A') . "</span></div>
             <div class='field'><span class='label'>Tel. Fin.:</span> <span class='value'>" . ($data['telefoneFinanceiro'] ?? 'N/A') . "</span></div>

@@ -14,7 +14,7 @@
 
     <section class="hero">
         <div class="hero-content">
-            <img src="https://hiperroll.com.br/storage/2024/11/Novo-Logotipo-2-contorno-branco-HiperRoll.png" alt="Hiperroll Logo" class="hero-logo">
+            <img src="Novo-Logotipo-HiperRoll.png" alt="Hiperroll Logo" class="hero-logo">
             <h1>Cadastro de Fornecedores e Clientes</h1>
         </div>
     </section>
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label for="cnpj">CNPJ / CPF *</label>
                             <div style="position: relative;">
-                                <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required>
+                                <input type="text" id="cnpj" name="cnpj" placeholder="CNPJ ou CPF" required>
                                 <div id="cnpjLoading" class="loading-spinner" style="position: absolute; right: 10px; top: 12px;"></div>
                             </div>
                         </div>
@@ -198,6 +198,24 @@
                                 <option value="Pix">Pix</option>
                                 <option value="Deposito">Depósito</option>
                                 <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="clientePagaBoletos">CLIENTE paga boletos de terceiros? *</label>
+                            <select id="clientePagaBoletos" name="clientePagaBoletos" required>
+                                <option value="">Selecione...</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="boletoAnexadoNF">Boleto anexado a NF? *</label>
+                            <select id="boletoAnexadoNF" name="boletoAnexadoNF" required>
+                                <option value="">Selecione...</option>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
                             </select>
                         </div>
 
