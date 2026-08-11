@@ -349,6 +349,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     addF("Prazo Pagto", data.prazoPagamento);
                     addF("E-mail Fin.", data.emailFinanceiro);
                     addF("Tel. Fin.", data.telefoneFinanceiro);
+                    addF("Status IBS/CBS", data.statusIbsCbs);
+                    addF("Alteração Regime Tributário 2027?", data.alteracaoRegimeTributario);
                     y += 5;
 
                     addSect("4. LOGÍSTICA");
@@ -567,6 +569,8 @@ document.addEventListener('DOMContentLoaded', () => {
             addF("Prazo Pagto", data.prazoPagamento);
             addF("E-mail Fin.", data.emailFinanceiro);
             addF("Tel. Fin.", data.telefoneFinanceiro);
+            addF("Status IBS/CBS", data.statusIbsCbs);
+            addF("Alteração Regime Tributário 2027?", data.alteracaoRegimeTributario);
             y += 5;
 
             addSect("4. LOGÍSTICA");

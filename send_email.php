@@ -97,6 +97,8 @@ $corpoEmail = "
             <div class='field'><span class='label'>Prazo:</span> <span class='value'>" . ($data['prazoPagamento'] ?? 'N/A') . "</span></div>
             <div class='field'><span class='label'>E-mail Fin.:</span> <span class='value'>" . ($data['emailFinanceiro'] ?? 'N/A') . "</span></div>
             <div class='field'><span class='label'>Tel. Fin.:</span> <span class='value'>" . ($data['telefoneFinanceiro'] ?? 'N/A') . "</span></div>
+            <div class='field'><span class='label'>Status IBS/CBS:</span> <span class='value'>" . ($data['statusIbsCbs'] ?? 'N/A') . "</span></div>
+            <div class='field'><span class='label'>Alteração Regime Tributário 2027?:</span> <span class='value'>" . ($data['alteracaoRegimeTributario'] ?? 'N/A') . "</span></div>
 
             <div class='section'>4. LOGÍSTICA</div>
             <div class='field'><span class='label'>Recebimento NF:</span> <span class='value'>" . ($data['horarioNF'] ?? 'N/A') . "</span></div>
