@@ -293,6 +293,24 @@ body {
     font-size: 0.85rem;
 }
 
+/* Footer */
+.site-footer {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.site-footer a {
+    color: var(--vivid-blue);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .form-grid {
