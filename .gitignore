@@ -1,6 +1,9 @@
 # Ignorar senhas e tokens
 .env
 
+# Ignorar script de teste da API de e-mail (contém credenciais)
+test_locaweb.php
+
 # Ignorar logs de erro gerados pelo servidor
 error_email.log
 error_log
