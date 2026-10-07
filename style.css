@@ -4,6 +4,7 @@
     --primary: #20236D; /* Official Hiperroll Dark Blue */
     --accent-red: #EC162B; /* Official Hiperroll Red */
     --vivid-blue: #0B57DA; /* Official Hiperroll Vivid Blue */
+    --success: #1E9E63;
     --text-dark: #2D3436;
     --text-light: #636E72;
     --white: #FFFFFF;
@@ -94,6 +95,26 @@ body {
     position: relative;
 }
 
+/* Track spans from the first to the last step indicator (space-around centers) */
+.progress-track {
+    position: absolute;
+    top: 50%;
+    left: 12.5%;
+    right: 12.5%;
+    height: 3px;
+    transform: translateY(-50%);
+    background: #E2E8F0;
+    border-radius: 3px;
+}
+
+.progress-bar {
+    width: 0;
+    height: 100%;
+    background: var(--primary);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
 .progress-steps {
     display: flex;
     justify-content: space-around;
@@ -122,6 +143,12 @@ body {
     border-color: var(--primary);
     color: var(--white);
     box-shadow: 0 0 0 8px rgba(32, 35, 109, 0.05);
+}
+
+.step-indicator.completed {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
 }
 
 /* Form Section Title */
@@ -192,6 +219,33 @@ body {
     border-radius: 4px;
     font-size: 0.9rem;
     background: #F8FAFC;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Field states set by script.js */
+.form-group .input-error {
+    border-color: var(--accent-red);
+    background: #FFF5F5;
+}
+
+.form-group .auto-filled {
+    border-color: var(--vivid-blue);
+    background: #EBF3FF;
+}
+
+/* Loading spinner (shown/hidden by script.js) */
+.loading-spinner {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(148, 163, 184, 0.35);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 .form-group.full-width {
@@ -230,6 +284,26 @@ body {
     max-width: 500px;
     width: 90%;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.success-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background: var(--success);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.modal .toast-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.6rem;
 }
 
 /* Navigation Buttons */
@@ -272,6 +346,18 @@ body {
     transform: translateY(-2px);
 }
 
+/* Centers text/spinner when script.js shows the submit button as flex */
+.btn-submit {
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* Toast */
 .toast-container {
     position: fixed;
@@ -291,6 +377,25 @@ body {
     align-items: center;
     gap: 10px;
     font-size: 0.85rem;
+    transition: opacity 0.3s ease;
+}
+
+.toast.fade-out {
+    opacity: 0;
+}
+
+.toast-icon {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-red);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
 }
 
 /* Footer */

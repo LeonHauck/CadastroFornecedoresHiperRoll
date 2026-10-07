@@ -377,15 +377,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     resolve(fullBase64.split(',')[1]);
                 };
 
-                const logoUrlProxy = "https://images.weserv.nl/?url=hiperroll.com.br/storage/2024/11/Novo-Logotipo-2-contorno-branco-HiperRoll.png";
+                // Logo local (mesmo arquivo do topo da página), sem depender de site externo
                 const img = new Image();
-                img.crossOrigin = "Anonymous";
                 img.onload = function () {
-                    try { doc.addImage(this, 'PNG', 155, 5, 35, 15); } catch (e) {}
+                    try { doc.addImage(this, 'PNG', 172, 3, 18, 19); } catch (e) {}
                     finishPdfData();
                 };
                 img.onerror = finishPdfData;
-                img.src = logoUrlProxy;
+                img.src = "Novo-Logotipo-HiperRoll.png";
             });
         };
 
@@ -511,9 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
         doc.setFont("helvetica", "bold");
         doc.text("FICHA DE CADASTRO - HIPERROLL", 20, 16);
 
-        // Logo
-        const logoUrl = "https://hiperroll.com.br/storage/2024/11/Novo-Logotipo-2-contorno-branco-HiperRoll.png";
-
         const finishPdf = () => {
             const addSect = (t) => {
                 if (y > 260) { doc.addPage(); y = 20; }
@@ -600,21 +596,19 @@ document.addEventListener('DOMContentLoaded', () => {
             doc.save(`Ficha_Hiperroll_${data.razaoSocial || 'Cadastro'}.pdf`);
         };
 
-        // Load image first (using a proxy to bypass CORS issues)
-        const logoUrlProxy = "https://images.weserv.nl/?url=hiperroll.com.br/storage/2024/11/Novo-Logotipo-2-contorno-branco-HiperRoll.png";
+        // Load the local logo first (same file used in the page header)
         const img = new Image();
-        img.crossOrigin = "Anonymous";
         img.onload = function () {
             try {
-                doc.addImage(this, 'PNG', 155, 5, 35, 15);
+                doc.addImage(this, 'PNG', 172, 3, 18, 19);
             } catch (e) { console.error("Error drawing logo:", e); }
             finishPdf();
         };
         img.onerror = function () {
-            console.warn("Logo failed to load via proxy, generating without it.");
+            console.warn("Logo failed to load, generating without it.");
             finishPdf();
         };
-        img.src = logoUrlProxy;
+        img.src = "Novo-Logotipo-HiperRoll.png";
     };
 
     function showToast(m) {
